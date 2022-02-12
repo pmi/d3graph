@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D3 graph</title>
+</head>
+<body>
+
+<h1>D3 graph</h1>
+
+</body>
+
+<script type="module">
+    import {D3Graph} from './script.js';
+    import * as d3 from 'https://cdn.skypack.dev/d3@7';
+
+    const graph = new D3Graph({
+        yLabel: "Daily close ($)",
+        xFunc: d => new Date(d.date),
+        ys: [
+            {
+                yFunc: d => d.y1,
+                color: "lightblue",
+                type: 'area',
+            }, {
+                yFunc: d => d.y1 - Math.random() * 100,
+                color: "gray",
+                curve: d3.curveBasisOpen,
+            }, {
+                yFunc: d => d.y1 - 100 - Math.random() * 100,
+                color: "coral",
+            }, {
+                yFunc: d => Math.random() - 10,
+                color: "orange",
+                type: 'area',
+                curve: d3.curveCatmullRom,
+                yLabel: 'Another Y',
+                yPosition: d3.axisRight,
+            }
+        ]
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.appendChild(graph.getSVG());
+    });
+
+    fetch("data2.json")
+        .then(response => response.json())
+        .then(data => graph.load(data));
+
+</script>
+</html>
